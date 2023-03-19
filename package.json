@@ -1,0 +1,11 @@
+{
+  "name": "fantasy-smash",
+  "version": "1.0.0",
+  "description": "A Bot with tools for managing a SSBU fantasy environment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sheff",
+  "license": "ISC"
+}
