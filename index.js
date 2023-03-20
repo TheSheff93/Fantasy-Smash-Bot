@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Message } = require('discord.js');
 const { prefix, token } = require('./config.json');
@@ -28,7 +30,5 @@ client.on('messageCreate', async (Message) => {
     //check that the message actually has the damn prefix
     if(!Message.content.startsWith(prefix)) return;
     let msgContent = Message.content.split(" ");
-    if(msgContent[0] == ".fuck"){
-        Message.channel.send("SHIT!")
-    }
+
 });
