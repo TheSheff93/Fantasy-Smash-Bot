@@ -1,4 +1,5 @@
-import fs from 'fs';
+//dependencies
+const getFiles = require('./getFiles');
 
 // Require the necessary discord.js classes
 const { Client, Events, GatewayIntentBits, Message } = require('discord.js');
@@ -13,6 +14,26 @@ const client = new Client({ 	intents: [
 ], 
 });
 
+
+
+const commandFiles = getFiles('./commands', ".js")
+console.log(commandFiles);
+const commands = {};
+//for all the files in directory and all subdirectories
+for(const command of commandFiles){
+    //import as a requirement
+    let commandFile = require(command);
+    //adjust if necessaryS
+    if(commandFile.default) commandFile = commandFile.default;
+    //operating system bullshit
+    const split = command.replace(/\\/g, '/').split('/')
+    //create a command name so that you can call within an array
+    const commandName = split[split.length-1].replace('.js', '');
+    //add the commandFile requirement to a command array list
+    
+    commands[commandName.toLowerCase()] = commandFile;
+}
+console.log(commands)
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
 client.once(Events.ClientReady, c => {
@@ -23,12 +44,26 @@ client.once(Events.ClientReady, c => {
 client.login(token);
 
 //message event handler
-client.on('messageCreate', async (Message) => {
+client.on('messageCreate', async (message) => {
     //check that message isn't from a bot
-    if(Message.author.bot) return;
+    if(message.author.bot) return;
     
     //check that the message actually has the damn prefix
-    if(!Message.content.startsWith(prefix)) return;
-    let msgContent = Message.content.split(" ");
-
+    if(!message.content.startsWith(prefix)) return;
+    
+    //drop the prefix and split the command
+    let msgContent = message.content.substring(1).split(" ");
+    var commandName = msgContent[0];
+    console.log(msgContent);
+    //check if the command is within the command array
+    if(!commands[commandName]){
+        return;
+    }
+    console.log(commands[commandName]);
+    try{
+        commands[commandName](message);
+    }
+    catch(error){
+        console.error(error);
+    }
 });
