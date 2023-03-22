@@ -17,7 +17,6 @@ const client = new Client({ 	intents: [
 
 
 const commandFiles = getFiles('./commands', ".js")
-console.log(commandFiles);
 const commands = {};
 //for all the files in directory and all subdirectories
 for(const command of commandFiles){
@@ -33,7 +32,6 @@ for(const command of commandFiles){
     
     commands[commandName.toLowerCase()] = commandFile;
 }
-console.log(commands)
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
 client.once(Events.ClientReady, c => {
@@ -54,12 +52,11 @@ client.on('messageCreate', async (message) => {
     //drop the prefix and split the command
     let msgContent = message.content.substring(1).split(" ");
     var commandName = msgContent[0];
-    console.log(msgContent);
     //check if the command is within the command array
     if(!commands[commandName]){
         return;
     }
-    console.log(commands[commandName]);
+    //try running the command and log the error to the console if something went wrong
     try{
         commands[commandName](message);
     }
