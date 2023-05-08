@@ -9,9 +9,9 @@ function callback(message){
         return console.error(err.message);
     }
     });
+    try{
 
-    message.reply("Yeah this worked I guess, fucking nerd")
-    let command = message.substring(1).split(' ');
+    let command = message.content.substring(1).split(' ');
     //parse id
     var char_id = parseInt(command[1]);
     //parse out the name of the character
@@ -19,12 +19,19 @@ function callback(message){
     for(i = 2; i < command.length; i++){
         characterName += command[i];
     }
-    db.run(`INSERT INTO t_Character(char_id, char_name) VALUES(?)`, [char_id, characterName], function(err) {
+
+    }
+    catch(err){
+        console.log(err.message)
+        message.reply("errr... I think you formatted that wrong, ^addcharacter <id> <character name> is the command, try using that idiot")
+    }
+    db.run(`INSERT INTO t_Character(char_id, char_name) VALUES(?, ?)`, [char_id, characterName], function(err) {
         if (err) {
           return console.log(err.message);
         }
         // get the last insert id
         console.log(`A row has been inserted with rowid ${this.lastID}`);
+        message.reply("YIPEE, "+characterName+ " has been added to the Character Table with ID: "+ char_id)
       });
     db.close();
 }
