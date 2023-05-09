@@ -1,5 +1,5 @@
 //retrieves a character from the databse 
-//^getcharacter id/name <id/name>
+//^getcharacter <id or name>
 function callback(message){
 
     //connect to the database
@@ -13,23 +13,17 @@ function callback(message){
     var queryValue;
     try{
         let command = message.content.substring(1).split(' ');
-        switch(command[1]){
-            case "id":
-                sql = `SELECT char_id as ID, char_name as name FROM t_Character
-                WHERE char_id = ?`
-                queryValue = parseInt(command[2])
-                break;
-            case "name":
-                queryValue = "";
-                sql = `SELECT char_id as ID, char_name as name FROM t_Character
-                WHERE char_name = ?`
-                for(i = 2; i < command.length; i++){
-                    queryValue += command[i];
-                }
-                break;
-            default:
-                message.reply("command variant not recognized")
-                return;
+        if(!parseInt(command[1],queryValue)){
+            queryValue = message.content.substring(14);
+            sql = `SELECT char_id as ID, char_name as name FROM t_Character
+            WHERE char_name = ?`
+            
+               
+        }
+        else{
+            sql = `SELECT char_id as ID, char_name as name FROM t_Character
+            WHERE char_id = ?`
+            queryValue = parseInt(command[1])
         }
     }
     catch(err){
