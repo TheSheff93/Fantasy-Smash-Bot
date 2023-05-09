@@ -16,14 +16,14 @@ function callback(message){
     var char_id = parseInt(command[1]);
     //parse out the name of the character
     var characterName = "";
-    for(i = 2; i < command.length; i++){
-        characterName += command[i];
-    }
+   
 
     }
     catch(err){
         console.log(err.message)
         message.reply("errr... I think you formatted that wrong, ^addcharacter <id> <character name> is the command, try using that idiot")
+        db.close();
+        return;
     }
     db.run(`INSERT INTO t_Character(char_id, char_name) VALUES(?, ?)`, [char_id, characterName], function(err) {
         if (err) {
